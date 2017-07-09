@@ -65,7 +65,7 @@ function warp
   echo VFILTER $VFILTER >> filters.txt
   echo AFILTER $AFILTER >> filters.txt
 
-  set TMP (~/bin/ffmpeg -i $INVIDEO -strict -2 -c:v h264 -preset veryfast -crf 10 -b:a 180k -vf "[in]$VFILTER:[out]" -af "[in]$AFILTER:[out]" -quality good $OUTVIDEO > /dev/null ^ /dev/null) > /dev/null ^ /dev/null
+  set TMP (~/bin/ffmpeg -i $INVIDEO -strict -2 -c:v h264 -preset veryfast -crf 10 -c:a aac -b:a 180k -vf "[in]$VFILTER:[out]" -af "[in]$AFILTER:[out]" -quality good $OUTVIDEO > /dev/null ^ /dev/null) > /dev/null ^ /dev/null
   rm $INVIDEO
   mv $OUTVIDEO $INVIDEO
 end;
@@ -78,8 +78,8 @@ function staircase_warp
   for I in (seq (count $argv))
     echo I $I
     set VID $argv[$I]
-    echo Setting factor $I to (scalc "1.05 ** ($I + 1)")
-    set FACTORS $FACTORS (scalc "1.05 ** $I")
+    echo Setting factor $I to (scalc "1.01 ** ($I + 1)")
+    set FACTORS $FACTORS (scalc "1.01 ** $I")
   end;
 
   echo Warping videos
@@ -95,7 +95,7 @@ end;
 set VIDEOFILE $argv[1]
 set TIMESFILE $argv[2]
 
-set TIMES (cat $TIMESFILE)
+set TIMES (cat $TIMESFILE | sort -n | uniq)
 echo Times are $TIMES
 
 set POS '00:00:00.00'
